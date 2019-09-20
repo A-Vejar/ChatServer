@@ -6,12 +6,10 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatController implements Runnable {
 
@@ -20,8 +18,12 @@ public class ChatController implements Runnable {
      */
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
 
+    /**
+     * Socket connection
+     */
     private Socket socket;
 
+    // Controller
     public ChatController(Socket socket) {
         this.socket = socket;
     }
@@ -31,7 +33,7 @@ public class ChatController implements Runnable {
         try {
             ChatController.processConnection(socket);
 
-        }catch(IOException e) {
+        } catch (IOException e) {
             log.error("Error: {}", e);
         }
     }
@@ -51,7 +53,7 @@ public class ChatController implements Runnable {
         final PrintWriter pw = new PrintWriter(socket.getOutputStream());
 
         // Get request
-        if(request.contains("GET")) {
+        if (request.contains("GET")) {
 
             pw.println("HTTP/1.1 200 OK");
             pw.println("Server: DSM-CHAT v0.0.1");
@@ -61,7 +63,7 @@ public class ChatController implements Runnable {
             pw.flush();
 
         // POST request
-        }else if(request.contains("POST")) {
+        } else if (request.contains("POST")) {
 
             bringMessage(lines);
 
@@ -97,21 +99,21 @@ public class ChatController implements Runnable {
 
         log.debug("Reading the InputStream ...");
 
-        while(true) {
+        while (true) {
 
             final String line = bfR.readLine();
             //final String line = scanner.nextLine();
 
-            if(line.length() != 0) {
+            if (line.length() != 0) {
 
                 lines.add(line);
 
-            }else {
+            } else {
 
                 // Stores the 'Content-Length' size coming from the InputStream' socket (Message sent)
                 int contentSize = 0;
 
-                for(int i = 0; i < lines.size(); i++){
+                for (int i = 0; i < lines.size(); i++) {
                     //lines.get(i);
                     if (lines.get(i).contains("Content-Length:")) {
                         // Stores both sizes data: 'username' and 'message' as int
@@ -120,13 +122,13 @@ public class ChatController implements Runnable {
                 }
 
                 // An user-message is found, a message is sent
-                if(contentSize != 0) {
+                if (contentSize != 0) {
 
                     // StringBuffer
                     StringBuffer strBf = new StringBuffer(contentSize);
 
                     // Reads the 'message-data' char by char and then stores it inside the StringBuffer
-                    for(int i = 0; i < contentSize; i++) {
+                    for (int i = 0; i < contentSize; i++) {
                         //strBf.appendCodePoint(scanner.next().charAt(i));
                         strBf.appendCodePoint(bfR.read());
                     }
@@ -154,6 +156,10 @@ public class ChatController implements Runnable {
      */
     private static ChatMessage bringMessage(List<String> data) {
 
+        LocalDateTime date = LocalDateTime.now();
+        //DateTimeFormatter day = DateTimeFormatter.ISO_LOCAL_DATE;
+        //DateTimeFormatter hour = DateTimeFormatter.ISO_LOCAL_TIME;
+
         String dataContent = data.get(data.size() - 1);
         String username = dataContent.substring(dataContent.indexOf('=') + 1, dataContent.indexOf('&'));
         String message = dataContent.substring(dataContent.indexOf('&') + 9);
@@ -161,7 +167,7 @@ public class ChatController implements Runnable {
         if (username.isEmpty() || message.isEmpty())
             return null;
 
-        ChatMessage chatMessage = new ChatMessage(username, message);
+        ChatMessage chatMessage = new ChatMessage(date, username, message);
         return ChatServer.add(chatMessage);
     }
 }

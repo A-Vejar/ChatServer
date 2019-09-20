@@ -20,8 +20,8 @@ public final class ChatMessage {
     private final String message;
 
     // Constructor
-    public ChatMessage(String username, String message) {
-        this.timestamp = LocalDateTime.now();
+    public ChatMessage(LocalDateTime timestamp, String username, String message) {
+        this.timestamp = timestamp;
         this.username = username;
         this.message = message;
     }
@@ -46,4 +46,5 @@ public final class ChatMessage {
     public String getMessage() {
         return message;
     }
+
 }

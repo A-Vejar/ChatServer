@@ -64,16 +64,16 @@ public final class ChatServer {
 
         final ServerSocket server = new ServerSocket(PORT);
 
-        while(true) {
+        while (true) {
 
-            try(Socket socket = server.accept()) {
+            try (Socket socket = server.accept()) {
                 log.debug("_____________________________________________________________________________________");
                 log.debug("Connected from: {}", socket);
 
                 ChatController cnx = new ChatController(socket);
                 cnx.run();
 
-            }catch(IOException e) {
+            } catch(IOException e) {
                 log.error("Error: {}", e);
                 throw e;
             }
@@ -87,10 +87,10 @@ public final class ChatServer {
      */
     public static ChatMessage add(final ChatMessage chatMessage){
 
-        if(chatMessage == null)
+        if (chatMessage == null)
             throw new IllegalArgumentException("Null data cant be insert");
 
-        synchronized (messages){
+        synchronized (messages) {
             messages.add(chatMessage);
         }
 
@@ -106,24 +106,25 @@ public final class ChatServer {
         File file = new File(PATH);
         StringBuffer str = new StringBuffer();
 
-        try(Scanner scanner = new Scanner(file).useDelimiter("\\A")) {
+        try (Scanner scanner = new Scanner(file).useDelimiter("\\A")) {
 
             // Reads line by line until there's no another input lines in the file
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 str.append(line);
 
-                if(line.contains("chat_interface")) {
+                if (line.contains("chat_interface")) {
 
                     str.append("<textarea rows='20' cols='75' readonly>");
-                    for(ChatMessage cht : messages) {
+                    for (ChatMessage cht : messages) {
+                        str.append("[").append(cht.getDate()).append("]");
                         str.append(cht.getUsername()).append(": ").append(cht.getMessage()).append("\n");
                     }
                     str.append("</textarea>");
                 }
             }
 
-        }catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             log.error("Error: {}", e);
         }
 
