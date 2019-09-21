@@ -3,11 +3,11 @@
     <title> Group-Chat </title>
 
     <style>
-        textarea{
-            resize: none;
-            font-size: 10pt;
-            font-weight: bold;
-            font-style: italic;
+        .parentdiv {
+            border:1px solid black;
+            height:350px;
+            width:700px;
+            overflow: overlay;
         }
     </style>
 
@@ -16,12 +16,15 @@
 <body>
     <h1 style="color:green"><b><i> Group-Chat Prototype</i></b></h1>
 
-    <div id="chat_interface"></div>
+    <div class="parentdiv">
+        <div id="chat_interface"></div>
+    </div>
+    <br/>
 
-    <div id="chat_post">
+    <div>
         <form method="post">
             <input type="text" name="username" placeholder="Username ..." size="10">
-            <input type="text" name="message" placeHolder="Type ..." size="57">
+            <input type="text" name="message" placeHolder="Type ..." size="78">
             <input type="submit" value="Send">
         </form>
     </div>

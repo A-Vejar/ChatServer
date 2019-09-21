@@ -110,17 +110,24 @@ public final class ChatServer {
 
             // Reads line by line until there's no another input lines in the file
             while (scanner.hasNextLine()) {
+
                 String line = scanner.nextLine();
                 str.append(line);
 
                 if (line.contains("chat_interface")) {
-
-                    str.append("<textarea rows='20' cols='75' readonly>");
+                    
+                    //str.append("<textarea rows='20' cols='75' readonly>");
+                    //String x = randomColor();
                     for (ChatMessage cht : messages) {
-                        str.append("[").append(cht.getDate()).append("]");
-                        str.append(cht.getUsername()).append(": ").append(cht.getMessage()).append("\n");
+                        str.append("<p>");
+                        str.append("[").append(cht.getDate(cht.getTimestamp())).append("] ");
+
+                        str.append("<b><i style='color:").append(randomColor()).append("'>");
+                        str.append(cht.getUsername()).append("</i></b>")
+                            .append(": ").append("<i>").append(cht.getMessage());
+                        str.append("</i>").append("\n").append("</p>");
                     }
-                    str.append("</textarea>");
+                    //str.append("</textarea>");
                 }
             }
 
@@ -129,5 +136,24 @@ public final class ChatServer {
         }
 
         return str.toString();
+    }
+
+    // Need to be fixed
+    private static String randomColor() {
+
+        String color[] = {"red", "cyan", "blue", "brown", "aqua", "darkorange", "darkviolet", "maroon"};
+
+        /*
+        List<String> c = new ArrayList<>();
+        String col = "";
+
+        for(int i = 0; i < color.length; i++){
+            col = color[i];
+            c.add(col);
+        }
+         */
+
+        //return c.get((int) (Math.random() * color.length));
+        return color[(int) (Math.random() * color.length)];
     }
 }

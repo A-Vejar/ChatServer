@@ -1,22 +1,28 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import lombok.Getter;
 
 public final class ChatMessage {
 
     /**
      * Time message receiver by the server
      */
+    @Getter
     private final LocalDateTime timestamp;
 
     /**
      * Username
      */
+    @Getter
     private final String username;
 
     /**
      * Username message
      */
+    @Getter
     private final String message;
 
     // Constructor
@@ -26,25 +32,9 @@ public final class ChatMessage {
         this.message = message;
     }
 
-    /**
-     * @return - Date
-     */
-    public LocalDateTime getDate() {
-        return timestamp;
-    }
+    public static String getDate(LocalDateTime timestamp) {
 
-    /**
-     * @return - Username
-     */
-    public String getUsername() {
-        return username;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return formatter.format(timestamp);
     }
-
-    /**
-     * @return - Message
-     */
-    public String getMessage() {
-        return message;
-    }
-
 }

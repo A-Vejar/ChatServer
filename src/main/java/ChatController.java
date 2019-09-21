@@ -65,7 +65,8 @@ public class ChatController implements Runnable {
         // POST request
         } else if (request.contains("POST")) {
 
-            bringMessage(lines);
+            // It pass the last line of the InputStream list
+            bringMessage(lines.get(lines.size() - 1));
 
             pw.println("HTTP/1.1 200 OK");
             pw.println("Server: DSM-CHAT v0.0.1");
@@ -150,19 +151,18 @@ public class ChatController implements Runnable {
     }
 
     /**
-     * Take the data-message content from the InputStream list
-     * @param data - InputStream list
+     * Take the data-message content from the last line of the InputStream list
+     * @param data - InputStream last line
      * @return - ChatMessage instance
      */
-    private static ChatMessage bringMessage(List<String> data) {
+    private static ChatMessage bringMessage(String data) {
 
         LocalDateTime date = LocalDateTime.now();
         //DateTimeFormatter day = DateTimeFormatter.ISO_LOCAL_DATE;
         //DateTimeFormatter hour = DateTimeFormatter.ISO_LOCAL_TIME;
 
-        String dataContent = data.get(data.size() - 1);
-        String username = dataContent.substring(dataContent.indexOf('=') + 1, dataContent.indexOf('&'));
-        String message = dataContent.substring(dataContent.indexOf('&') + 9);
+        String username = data.substring(data.indexOf('=') + 1, data.indexOf('&'));
+        String message = data.substring(data.indexOf('&') + 9);
 
         if (username.isEmpty() || message.isEmpty())
             return null;
