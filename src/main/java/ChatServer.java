@@ -74,6 +74,7 @@ public final class ChatServer {
                 cnx.run();
 
             } catch(IOException e) {
+
                 log.error("Error: {}", e);
                 throw e;
             }
@@ -119,13 +120,13 @@ public final class ChatServer {
                     //str.append("<textarea rows='20' cols='75' readonly>");
                     //String x = randomColor();
                     for (ChatMessage cht : messages) {
-                        str.append("<p>");
-                        str.append("[").append(cht.getDate(cht.getTimestamp())).append("] ");
 
-                        str.append("<b><i style='color:").append(randomColor()).append("'>");
-                        str.append(cht.getUsername()).append("</i></b>")
-                            .append(": ").append("<i>").append(cht.getMessage());
-                        str.append("</i>").append("\n").append("</p>");
+                        str.append("<p>")
+                                .append("[").append(cht.getDate(cht.getTimestamp())).append("] ")
+                                .append("<b><i style='color:red'>").append(cht.getUsername()).append("</i></b>")
+                                .append(": ")
+                                .append("<i>").append(cht.getMessage()).append("</i>").append("\n");
+                        str.append("</p>");
                     }
                     //str.append("</textarea>");
                 }
@@ -138,22 +139,21 @@ public final class ChatServer {
         return str.toString();
     }
 
-    // Need to be fixed
+    /*
     private static String randomColor() {
 
         String color[] = {"red", "cyan", "blue", "brown", "aqua", "darkorange", "darkviolet", "maroon"};
 
-        /*
-        List<String> c = new ArrayList<>();
-        String col = "";
+        //List<String> c = new ArrayList<>();
+        //String col = "";
 
-        for(int i = 0; i < color.length; i++){
-            col = color[i];
-            c.add(col);
-        }
-         */
+        //for(int i = 0; i < color.length; i++){
+            //col = color[i];
+            //c.add(col);
+        //}
 
         //return c.get((int) (Math.random() * color.length));
         return color[(int) (Math.random() * color.length)];
     }
+    */
 }

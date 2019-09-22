@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ChatController implements Runnable {
 
@@ -21,7 +22,7 @@ public class ChatController implements Runnable {
     /**
      * Socket connection
      */
-    private Socket socket;
+    private final Socket socket;
 
     // Controller
     public ChatController(Socket socket) {
@@ -31,7 +32,7 @@ public class ChatController implements Runnable {
     @Override
     public void run() {
         try {
-            ChatController.processConnection(socket);
+            processConnection(socket);
 
         } catch (IOException e) {
             log.error("Error: {}", e);
@@ -46,7 +47,6 @@ public class ChatController implements Runnable {
 
         // Reading the InputStream
         final List<String> lines = readInputStreamByLines(socket);
-
         String request = lines.get(0);
         log.debug("Request: {}", request);
 
@@ -96,7 +96,7 @@ public class ChatController implements Runnable {
         BufferedReader bfR = new BufferedReader(new InputStreamReader(inS));
 
         // Scanner
-        //Scanner scanner = new Scanner(inS).useDelimiter("\\A");
+        //Scanner scanner = new Scanner(new InputStreamReader(inS));
 
         log.debug("Reading the InputStream ...");
 
@@ -122,7 +122,7 @@ public class ChatController implements Runnable {
                     }
                 }
 
-                // An user-message is found, a message is sent
+                // An user-message its found (a message is sent)
                 if (contentSize != 0) {
 
                     // StringBuffer
@@ -135,7 +135,7 @@ public class ChatController implements Runnable {
                     }
 
                     // HTML 'message-data' decoding
-                    String msgData = URLDecoder.decode(String.valueOf(strBf), String.valueOf(StandardCharsets.UTF_8));
+                    String msgData = URLDecoder.decode(strBf.toString(), String.valueOf(StandardCharsets.UTF_8));
                     log.debug("Data content: {}", msgData);
 
                     lines.add(msgData);
